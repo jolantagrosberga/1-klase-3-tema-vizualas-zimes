@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="lv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kur jāspiež?</title><style>
+:root{--bg:#ffffff;--soft:#FFF8D6;--yellow:#F2C200;--yellow2:#FFD84D;--green:#3E9B4F;--green2:#2E7A3C;--greenSoft:#E6F4E4;
+--text:#24382B;--muted:#5E6E63;--red:#D9534F;--shadow:0 6px 0 rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#EEF3EC;overflow:hidden;font-family:"Segoe UI",Candara,"Trebuchet MS",Arial,sans-serif;color:var(--text)}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;background:var(--bg);position:relative;transform-origin:center center;flex:none;
+ border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.12);user-select:none;-webkit-user-select:none}
+header{height:118px;display:flex;align-items:center;gap:26px;padding:0 44px;border-bottom:10px solid var(--yellow);background:var(--greenSoft)}
+header .badge{width:74px;height:74px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;flex:none}
+header h1{font-size:50px;font-weight:800;color:var(--green2);line-height:1}
+header p{font-size:28px;color:var(--muted);margin-top:6px}
+.btn{font:inherit;border:none;cursor:pointer;border-radius:22px;background:var(--yellow2);color:var(--text);font-size:30px;font-weight:700;
+ padding:16px 30px;box-shadow:var(--shadow);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.btn.green{background:var(--green);color:#fff}
+.btn.ghost{background:#fff;border:4px solid var(--green);color:var(--green2)}
+#fsBtn{position:absolute;right:22px;bottom:18px;z-index:50;font:inherit;font-size:20px;font-weight:700;border:3px solid var(--green);background:#fff;color:var(--green2);
+ border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+#fsBtn svg{width:24px;height:24px}
+.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.shake{animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}40%{transform:translateX(14px)}60%{transform:translateX(-9px)}80%{transform:translateX(9px)}}
+.stars{display:flex;gap:8px}
+.star{width:40px;height:40px}
+
+#main{display:flex;gap:40px;padding:30px 44px 0;align-items:flex-start}
+#left{width:900px;height:640px;flex:none;position:relative}
+#tablet{width:900px;height:620px;background:#263238;border-radius:56px;padding:40px;box-shadow:0 12px 0 #1a2328}
+#screen{width:100%;height:100%;background:#E3F2FD;border-radius:22px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);place-items:center;padding:20px}
+.ic{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;font:inherit;border-radius:30px;padding:6px}
+.ic svg{width:150px;height:150px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.15))}
+.ic.ok{background:#C8E6C9}
+#map{width:900px;height:600px;position:relative;border-radius:24px;overflow:hidden;border:6px solid var(--yellow);display:none}
+#map>svg{position:absolute;inset:0}
+.mk{position:absolute;width:84px;height:84px;margin:-42px 0 0 -42px;border:none;background:none;cursor:pointer;border-radius:50%;padding:6px}
+.mk svg{width:72px;height:72px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.25))}
+.mk.ok{background:rgba(255,255,255,.85);box-shadow:0 0 0 6px var(--green)}
+#side{flex:1;display:flex;flex-direction:column;gap:16px}
+#tabs{display:flex;gap:10px}#tabs .btn{font-size:26px;padding:12px 22px;background:#fff;border:4px solid var(--yellow)}#tabs .btn.on{background:var(--yellow2)}
+#q{font-size:38px;font-weight:800;color:var(--green2);line-height:1.2;min-height:118px;background:var(--soft);border-radius:24px;padding:18px 24px}
+#fb{font-size:28px;font-weight:700;min-height:40px}
+#legend{display:none;grid-template-columns:1fr 1fr;gap:8px 14px;background:#fff;border:4px solid #e3e3e3;border-radius:20px;padding:12px 16px}
+#legend h3{grid-column:span 2;font-size:24px;color:var(--muted)}
+#legend div{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700}
+#legend svg{width:42px;height:42px;flex:none}
+#stars{flex-wrap:wrap}
+</style></head>
+<body><div id="wrap"><div id="stage">
+<header><div class="badge">3</div><div><h1>Kur jāspiež?</h1><p>Ikonas ekrānā un apzīmējumi kartē ir zīmes.</p></div></header>
+<div id="main"><div id="left"><div id="tablet"><div id="screen"></div></div><div id="map"></div></div>
+<div id="side"><div id="tabs"><button class="btn on" data-m="tab">Planšete</button><button class="btn" data-m="map">Karte</button></div>
+<div id="q"></div><div id="fb"></div><div id="legend"></div>
+<div class="stars" id="stars"></div><button class="btn" id="again" style="align-self:flex-start">↻ Sākt no jauna</button></div></div>
+<button id="fsBtn" type="button"><svg viewBox="0 0 24 24"></svg><span>Atvērt pilnekrāna režīmu</span></button>
+</div></div>
+<script>
+(function(){
+ var st=document.getElementById('stage');
+ function fit(){var s=Math.min(window.innerWidth/1600,window.innerHeight/900);st.style.transform='scale('+s+')';window.__scale=s;}
+ window.addEventListener('resize',fit);fit();
+ var b=document.getElementById('fsBtn'),d=document;
+ function isFs(){return d.fullscreenElement||d.webkitFullscreenElement||d.msFullscreenElement;}
+ function upd(){b.querySelector('span').textContent=isFs()?'Iziet no pilnekrāna režīma':'Atvērt pilnekrāna režīmu';
+  b.querySelector('svg').innerHTML=isFs()?'<path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>':'<path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>';
+  setTimeout(fit,60);}
+ b.addEventListener('click',function(){var e=d.documentElement;
+  if(!isFs()){(e.requestFullscreen||e.webkitRequestFullscreen||e.msRequestFullscreen).call(e);}
+  else{(d.exitFullscreen||d.webkitExitFullscreen||d.msExitFullscreen).call(d);}});
+ ['fullscreenchange','webkitfullscreenchange','MSFullscreenChange'].forEach(function(ev){d.addEventListener(ev,upd);});
+ upd();
+})();
+window.shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;};
+window.starSVG=function(on){return '<svg class="star" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill="'+(on?'#F2C200':'#E3E3E3')+'" stroke="'+(on?'#C99A00':'#cfcfcf')+'" stroke-width="1"/></svg>';};
+</script><script>var TAB=[{"k": "kamera", "name": "kamera", "q": "Kur var nofotografēt draugu?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#5C6BC0\"/><rect x=\"40\" y=\"62\" width=\"120\" height=\"84\" rx=\"14\" fill=\"#fff\"/><rect x=\"74\" y=\"48\" width=\"40\" height=\"20\" rx=\"6\" fill=\"#fff\"/><circle cx=\"100\" cy=\"104\" r=\"28\" fill=\"#5C6BC0\"/><circle cx=\"100\" cy=\"104\" r=\"16\" fill=\"#fff\"/></svg>"}, {"k": "muzika", "name": "mūzika", "q": "Kur var klausīties dziesmas?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#EC407A\"/><path d=\"M80 140 V62 L140 50 V128\" stroke=\"#fff\" stroke-width=\"12\" fill=\"none\" stroke-linejoin=\"round\"/><ellipse cx=\"68\" cy=\"142\" rx=\"18\" ry=\"14\" fill=\"#fff\"/><ellipse cx=\"128\" cy=\"130\" rx=\"18\" ry=\"14\" fill=\"#fff\"/></svg>"}, {"k": "zvans", "name": "telefons", "q": "Kur var piezvanīt mammai?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#43A047\"/><path d=\"M62 52 Q50 56 52 74 Q60 118 104 146 Q122 156 138 146 L146 134 Q148 126 140 122 L120 112 Q112 110 108 116 L100 124 Q80 112 74 96 L82 88 Q88 84 86 76 L78 56 Q74 48 62 52Z\" fill=\"#fff\"/></svg>"}, {"k": "zimesana", "name": "zīmēšana", "q": "Kur var uzzīmēt bildi?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#FF8F00\"/><path d=\"M58 150 Q58 126 78 122 L130 54 Q138 46 146 54 Q154 62 146 70 L94 138 Q90 158 58 150Z\" fill=\"#fff\"/><circle cx=\"64\" cy=\"144\" r=\"8\" fill=\"#FF8F00\"/></svg>"}, {"k": "pulkstenis", "name": "pulkstenis", "q": "Kur var redzēt, cik ir pulkstenis?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#546E7A\"/><circle cx=\"100\" cy=\"100\" r=\"54\" fill=\"#fff\"/><path d=\"M100 64 V100 L126 114\" stroke=\"#546E7A\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\"/></svg>"}, {"k": "laiks", "name": "laikapstākļi", "q": "Kur var uzzināt, vai rīt līs lietus?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#29B6F6\"/><circle cx=\"82\" cy=\"80\" r=\"28\" fill=\"#FFE082\"/><path d=\"M60 140 Q48 140 48 124 Q48 108 66 108 Q72 88 96 90 Q116 90 120 108 Q144 104 148 124 Q150 140 134 140Z\" fill=\"#fff\"/></svg>"}, {"k": "gramata", "name": "grāmata", "q": "Kur var izlasīt pasaku?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#8D6E63\"/><path d=\"M100 66 Q76 52 46 58 V142 Q76 136 100 150 Q124 136 154 142 V58 Q124 52 100 66Z\" fill=\"#fff\"/><line x1=\"100\" y1=\"68\" x2=\"100\" y2=\"148\" stroke=\"#8D6E63\" stroke-width=\"6\"/></svg>"}, {"k": "speles", "name": "spēles", "q": "Kur var paspēlēt spēli?", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\" width=\"150\" height=\"150\"><rect x=\"8\" y=\"8\" width=\"184\" height=\"184\" rx=\"44\" fill=\"#7E57C2\"/><rect x=\"38\" y=\"76\" width=\"124\" height=\"60\" rx=\"30\" fill=\"#fff\"/><rect x=\"62\" y=\"98\" width=\"28\" height=\"10\" fill=\"#7E57C2\"/><rect x=\"71\" y=\"89\" width=\"10\" height=\"28\" fill=\"#7E57C2\"/><circle cx=\"128\" cy=\"96\" r=\"7\" fill=\"#7E57C2\"/><circle cx=\"142\" cy=\"112\" r=\"7\" fill=\"#7E57C2\"/></svg>"}],MAP=[{"k": "skola", "name": "skola", "q": "Kur ir skola?", "x": 105, "y": 95, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#F57C00\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M50 20 L80 40 V78 H20 V40Z\" fill=\"#fff\"/><rect x=\"43\" y=\"56\" width=\"14\" height=\"22\" fill=\"#F57C00\"/><circle cx=\"50\" cy=\"42\" r=\"6\" fill=\"#F57C00\"/></svg>"}, {"k": "veikals", "name": "veikals", "q": "Kur var nopirkt maizi?", "x": 440, "y": 100, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#43A047\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M18 28 H28 L36 62 H72 L80 38 H32\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"40\" cy=\"74\" r=\"6\" fill=\"#fff\"/><circle cx=\"68\" cy=\"74\" r=\"6\" fill=\"#fff\"/></svg>"}, {"k": "slimnica", "name": "slimnīca", "q": "Kur ārstē slimus cilvēkus?", "x": 825, "y": 460, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#E53935\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M42 22 H58 V42 H78 V58 H58 V78 H42 V58 H22 V42 H42Z\" fill=\"#fff\"/></svg>"}, {"k": "pietura", "name": "autobusa pietura", "q": "Kur gaidīt autobusu?", "x": 340, "y": 235, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#1E88E5\" stroke=\"#fff\" stroke-width=\"4\"/><rect x=\"24\" y=\"22\" width=\"52\" height=\"46\" rx=\"8\" fill=\"#fff\"/><rect x=\"30\" y=\"30\" width=\"40\" height=\"16\" rx=\"2\" fill=\"#1E88E5\"/><rect x=\"28\" y=\"68\" width=\"10\" height=\"10\" rx=\"2\" fill=\"#fff\"/><rect x=\"62\" y=\"68\" width=\"10\" height=\"10\" rx=\"2\" fill=\"#fff\"/><circle cx=\"35\" cy=\"57\" r=\"4\" fill=\"#1E88E5\"/><circle cx=\"65\" cy=\"57\" r=\"4\" fill=\"#1E88E5\"/></svg>"}, {"k": "parks", "name": "parks", "q": "Kur var pastaigāties starp kokiem?", "x": 130, "y": 470, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"4\"/><circle cx=\"50\" cy=\"40\" r=\"20\" fill=\"#fff\"/><rect x=\"45\" y=\"54\" width=\"10\" height=\"26\" fill=\"#fff\"/></svg>"}, {"k": "biblioteka", "name": "bibliotēka", "q": "Kur var paņemt grāmatu?", "x": 445, "y": 420, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#8D6E63\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M50 32 Q36 24 20 27 V74 Q36 71 50 79 Q64 71 80 74 V27 Q64 24 50 32Z\" fill=\"#fff\"/><line x1=\"50\" y1=\"34\" x2=\"50\" y2=\"77\" stroke=\"#8D6E63\" stroke-width=\"4\"/></svg>"}, {"k": "pasts", "name": "pasts", "q": "Kur var nosūtīt vēstuli?", "x": 825, "y": 115, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#F9A825\" stroke=\"#fff\" stroke-width=\"4\"/><rect x=\"20\" y=\"30\" width=\"60\" height=\"42\" rx=\"5\" fill=\"#fff\"/><path d=\"M22 33 L50 55 L78 33\" stroke=\"#F9A825\" stroke-width=\"5\" fill=\"none\" stroke-linejoin=\"round\"/></svg>"}, {"k": "stavvieta", "name": "stāvvieta", "q": "Kur var novietot mašīnu?", "x": 430, "y": 535, "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"72\" height=\"72\"><rect x=\"4\" y=\"4\" width=\"92\" height=\"92\" rx=\"14\" fill=\"#1565C0\" stroke=\"#fff\" stroke-width=\"4\"/><text x=\"50\" y=\"72\" font-size=\"58\" font-weight=\"900\" font-family=\"Arial\" fill=\"#fff\" text-anchor=\"middle\">P</text></svg>"}],MAPBG="<svg viewBox=\"0 0 900 600\" width=\"900\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect width=\"900\" height=\"600\" fill=\"#E8F3DC\"/>\n<path d=\"M600 0 C560 120 680 220 620 330 C570 420 640 520 610 600 L700 600 C730 520 660 420 710 330 C770 220 650 120 690 0Z\" fill=\"#90CAF9\"/>\n<rect x=\"0\" y=\"270\" width=\"900\" height=\"56\" fill=\"#B0B7BC\"/>\n<rect x=\"250\" y=\"0\" width=\"56\" height=\"600\" fill=\"#B0B7BC\"/>\n<path d=\"M0 298 H900\" stroke=\"#fff\" stroke-width=\"4\" stroke-dasharray=\"22 18\"/>\n<path d=\"M278 0 V600\" stroke=\"#fff\" stroke-width=\"4\" stroke-dasharray=\"22 18\"/>\n<rect x=\"590\" y=\"262\" width=\"150\" height=\"72\" fill=\"#A1887F\"/><rect x=\"590\" y=\"262\" width=\"150\" height=\"8\" fill=\"#6D4C41\"/><rect x=\"590\" y=\"326\" width=\"150\" height=\"8\" fill=\"#6D4C41\"/>\n<rect x=\"590\" y=\"270\" width=\"150\" height=\"56\" fill=\"#B0B7BC\"/><path d=\"M590 298 H740\" stroke=\"#fff\" stroke-width=\"4\" stroke-dasharray=\"22 18\"/>\n<ellipse cx=\"130\" cy=\"470\" rx=\"110\" ry=\"90\" fill=\"#A5D6A7\"/>\n<circle cx=\"80\" cy=\"440\" r=\"22\" fill=\"#66BB6A\"/><circle cx=\"150\" cy=\"420\" r=\"26\" fill=\"#66BB6A\"/><circle cx=\"170\" cy=\"500\" r=\"20\" fill=\"#66BB6A\"/><circle cx=\"95\" cy=\"515\" r=\"18\" fill=\"#66BB6A\"/>\n<rect x=\"60\" y=\"60\" width=\"90\" height=\"70\" rx=\"6\" fill=\"#FFCC80\"/><rect x=\"380\" y=\"60\" width=\"120\" height=\"80\" rx=\"6\" fill=\"#FFAB91\"/>\n<rect x=\"390\" y=\"380\" width=\"110\" height=\"80\" rx=\"6\" fill=\"#CE93D8\"/><rect x=\"60\" y=\"180\" width=\"80\" height=\"60\" rx=\"6\" fill=\"#B3E5FC\"/>\n<rect x=\"780\" y=\"80\" width=\"90\" height=\"70\" rx=\"6\" fill=\"#FFF59D\"/><rect x=\"780\" y=\"420\" width=\"90\" height=\"80\" rx=\"6\" fill=\"#EF9A9A\"/>\n<rect x=\"400\" y=\"200\" width=\"70\" height=\"50\" rx=\"6\" fill=\"#C5E1A5\"/><rect x=\"360\" y=\"500\" width=\"140\" height=\"70\" rx=\"4\" fill=\"#CFD8DC\"/>\n</svg>";
+var mode='tab',D=TAB,order,step,locked;
+var leg=document.getElementById('legend');leg.innerHTML='<h3>Apzīmējumi</h3>'+MAP.map(function(m){return '<div>'+m.svg+'<span>'+m.name+'</span></div>'}).join('');
+function start(){D=mode==='tab'?TAB:MAP;order=shuffle(D);step=0;
+ document.getElementById('tablet').style.display=mode==='tab'?'block':'none';
+ document.getElementById('map').style.display=mode==='map'?'block':'none';
+ leg.style.display=mode==='map'?'grid':'none';
+ if(mode==='tab'){var s=document.getElementById('screen');s.innerHTML='';
+  shuffle(TAB).forEach(function(it){var b=document.createElement('button');b.className='ic';b.innerHTML=it.svg;b.onclick=function(){tap(it,b)};s.appendChild(b);});}
+ else{var m=document.getElementById('map');m.innerHTML=MAPBG;
+  MAP.forEach(function(it){var b=document.createElement('button');b.className='mk';b.style.left=it.x+'px';b.style.top=it.y+'px';b.innerHTML=it.svg;b.onclick=function(){tap(it,b)};m.appendChild(b);});}
+ ask();}
+function hint(){return mode==='tab'?'Pieskaries pareizajai ikonai planšetē.':'Apskati apzīmējumus un pieskaries pareizajai zīmei kartē.';}
+function stars(){var h='';for(var i=0;i<D.length;i++)h+=starSVG(i<step);document.getElementById('stars').innerHTML=h;}
+function ask(){locked=false;stars();var fb=document.getElementById('fb');
+ if(step>=D.length){document.getElementById('q').innerHTML=mode==='tab'?'Malacis! Tu atradi visas ikonas.':'Malacis! Tu proti lasīt karti.';
+  fb.textContent=mode==='tab'?'Atver cilni "Karte"!':'Kuras no šīm vietām ir tavā apkārtnē?';fb.style.color='var(--green2)';return;}
+ document.getElementById('q').textContent=order[step].q;fb.textContent=hint();fb.style.color='var(--text)';
+ [].forEach.call(document.querySelectorAll('.ic,.mk'),function(x){x.classList.remove('ok')});}
+function tap(it,b){if(locked||step>=D.length)return;var fb=document.getElementById('fb');
+ if(it.k===order[step].k){locked=true;b.classList.add('ok','pop');fb.innerHTML='Pareizi! Tā ir <b>'+it.name+'</b>.';fb.style.color='var(--green2)';step++;stars();setTimeout(ask,1600);}
+ else{b.classList.add('shake');fb.innerHTML='Šī ir <b>'+it.name+'</b>. Meklē vēl!';fb.style.color='var(--red)';}
+ setTimeout(function(){b.classList.remove('shake','pop')},500);}
+[].forEach.call(document.querySelectorAll('#tabs .btn'),function(b){b.onclick=function(){[].forEach.call(document.querySelectorAll('#tabs .btn'),function(x){x.classList.remove('on')});b.classList.add('on');mode=b.dataset.m;start();};});
+document.getElementById('again').onclick=start;start();
+</script></body></html>

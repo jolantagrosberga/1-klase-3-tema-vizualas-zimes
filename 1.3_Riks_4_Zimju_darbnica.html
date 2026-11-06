@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="lv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zīmju darbnīca</title><style>
+:root{--bg:#ffffff;--soft:#FFF8D6;--yellow:#F2C200;--yellow2:#FFD84D;--green:#3E9B4F;--green2:#2E7A3C;--greenSoft:#E6F4E4;
+--text:#24382B;--muted:#5E6E63;--red:#D9534F;--shadow:0 6px 0 rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#EEF3EC;overflow:hidden;font-family:"Segoe UI",Candara,"Trebuchet MS",Arial,sans-serif;color:var(--text)}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;background:var(--bg);position:relative;transform-origin:center center;flex:none;
+ border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.12);user-select:none;-webkit-user-select:none}
+header{height:118px;display:flex;align-items:center;gap:26px;padding:0 44px;border-bottom:10px solid var(--yellow);background:var(--greenSoft)}
+header .badge{width:74px;height:74px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;flex:none}
+header h1{font-size:50px;font-weight:800;color:var(--green2);line-height:1}
+header p{font-size:28px;color:var(--muted);margin-top:6px}
+.btn{font:inherit;border:none;cursor:pointer;border-radius:22px;background:var(--yellow2);color:var(--text);font-size:30px;font-weight:700;
+ padding:16px 30px;box-shadow:var(--shadow);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.btn.green{background:var(--green);color:#fff}
+.btn.ghost{background:#fff;border:4px solid var(--green);color:var(--green2)}
+#fsBtn{position:absolute;right:22px;bottom:18px;z-index:50;font:inherit;font-size:20px;font-weight:700;border:3px solid var(--green);background:#fff;color:var(--green2);
+ border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+#fsBtn svg{width:24px;height:24px}
+.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.shake{animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}40%{transform:translateX(14px)}60%{transform:translateX(-9px)}80%{transform:translateX(9px)}}
+.stars{display:flex;gap:8px}
+.star{width:40px;height:40px}
+
+#main{display:flex;gap:24px;padding:22px 30px 0}
+#palette{width:316px;flex:none;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-content:start}
+.sh{width:72px;height:72px;border-radius:16px;border:4px solid #e3e3e3;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#3E9B4F}
+.sh svg{width:54px;height:54px;fill:currentColor}
+#board{position:relative;width:960px;height:660px;background:#fff;border:6px dashed #cfd8cf;border-radius:24px;overflow:hidden;flex:none;touch-action:none}
+#frame{position:absolute;inset:0;pointer-events:none}
+.el{position:absolute;touch-action:none;cursor:grab}
+.el svg{width:100%;height:100%;fill:currentColor;display:block}
+.el.sel{outline:5px dashed var(--yellow);outline-offset:6px}
+#tools{flex:1;display:flex;flex-direction:column;gap:8px}
+#tools h3{font-size:21px;color:var(--muted)}
+#cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.col{height:46px;border-radius:14px;border:4px solid #fff;box-shadow:0 0 0 2px #ddd;cursor:pointer}
+.col.on{box-shadow:0 0 0 5px var(--text)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#tools .btn{font-size:20px;padding:9px 6px;white-space:nowrap}
+#frames{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#frames .btn{font-size:19px}
+#frames .btn.on{background:var(--green);color:#fff}
+</style></head>
+<body><div id="wrap"><div id="stage">
+<header><div class="badge">4</div><div><h1>Zīmju darbnīca</h1><p>Saliec savu zīmi vai bilžu vēstuli. Lai klase uzmin, ko tā saka!</p></div></header>
+<div id="main"><div id="palette"></div>
+<div id="board"><svg id="frame" viewBox="0 0 960 660"></svg></div>
+<div id="tools"><h3>Pamats</h3><div id="frames">
+<button class="btn" data-f="aplis">Aplis</button><button class="btn" data-f="trijsturis">Trijstūris</button>
+<button class="btn" data-f="kvadrats">Kvadrāts</button><button class="btn" data-f="vestule">Bilžu vēstule</button>
+<button class="btn" data-f="tukss" style="grid-column:span 2">Bez pamata</button></div>
+<h3>Krāsa</h3><div id="cols"></div>
+<h3>Izvēlētā forma</h3><div class="row"><button class="btn" id="big">+ Lielāka</button><button class="btn" id="small">− Mazāka</button>
+<button class="btn" id="rot">↻ Pagriezt</button><button class="btn" id="del">✕ Dzēst</button></div>
+<button class="btn ghost" id="clear" style="margin-bottom:80px">Notīrīt visu</button></div></div>
+<button id="fsBtn" type="button"><svg viewBox="0 0 24 24"></svg><span>Atvērt pilnekrāna režīmu</span></button>
+</div></div>
+<script>
+(function(){
+ var st=document.getElementById('stage');
+ function fit(){var s=Math.min(window.innerWidth/1600,window.innerHeight/900);st.style.transform='scale('+s+')';window.__scale=s;}
+ window.addEventListener('resize',fit);fit();
+ var b=document.getElementById('fsBtn'),d=document;
+ function isFs(){return d.fullscreenElement||d.webkitFullscreenElement||d.msFullscreenElement;}
+ function upd(){b.querySelector('span').textContent=isFs()?'Iziet no pilnekrāna režīma':'Atvērt pilnekrāna režīmu';
+  b.querySelector('svg').innerHTML=isFs()?'<path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>':'<path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>';
+  setTimeout(fit,60);}
+ b.addEventListener('click',function(){var e=d.documentElement;
+  if(!isFs()){(e.requestFullscreen||e.webkitRequestFullscreen||e.msRequestFullscreen).call(e);}
+  else{(d.exitFullscreen||d.webkitExitFullscreen||d.msExitFullscreen).call(d);}});
+ ['fullscreenchange','webkitfullscreenchange','MSFullscreenChange'].forEach(function(ev){d.addEventListener(ev,upd);});
+ upd();
+})();
+window.shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;};
+window.starSVG=function(on){return '<svg class="star" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill="'+(on?'#F2C200':'#E3E3E3')+'" stroke="'+(on?'#C99A00':'#cfcfcf')+'" stroke-width="1"/></svg>';};
+</script><script>var SH={"aplis": "<circle cx=\"50\" cy=\"50\" r=\"44\"/>", "kvadrats": "<rect x=\"8\" y=\"8\" width=\"84\" height=\"84\" rx=\"6\"/>", "trijsturis": "<path d=\"M50 6 L94 90 H6Z\"/>", "sirds": "<path d=\"M50 88 C10 60 4 34 22 20 C36 10 48 18 50 28 C52 18 64 10 78 20 C96 34 90 60 50 88Z\"/>", "zvaigzne": "<path d=\"M50 4 L62 38 L96 38 L68 58 L78 92 L50 72 L22 92 L32 58 L4 38 L38 38Z\"/>", "bulta": "<path d=\"M6 38 H58 V16 L96 50 L58 84 V62 H6Z\"/>", "saule": "<g><circle cx=\"50\" cy=\"50\" r=\"24\"/><g stroke=\"currentColor\" stroke-width=\"9\" stroke-linecap=\"round\"><line x1=\"50\" y1=\"4\" x2=\"50\" y2=\"16\"/><line x1=\"50\" y1=\"84\" x2=\"50\" y2=\"96\"/><line x1=\"4\" y1=\"50\" x2=\"16\" y2=\"50\"/><line x1=\"84\" y1=\"50\" x2=\"96\" y2=\"50\"/><line x1=\"17\" y1=\"17\" x2=\"26\" y2=\"26\"/><line x1=\"74\" y1=\"74\" x2=\"83\" y2=\"83\"/><line x1=\"83\" y1=\"17\" x2=\"74\" y2=\"26\"/><line x1=\"26\" y1=\"74\" x2=\"17\" y2=\"83\"/></g></g>", "menes": "<path d=\"M62 6 A44 44 0 1 0 94 70 A36 36 0 1 1 62 6Z\"/>", "koks": "<g><rect x=\"42\" y=\"56\" width=\"16\" height=\"40\"/><circle cx=\"50\" cy=\"40\" r=\"34\"/></g>", "maja": "<path d=\"M50 6 L94 44 H82 V94 H18 V44 H6Z\"/>", "lase": "<path d=\"M50 4 C70 36 84 52 84 66 A34 34 0 0 1 16 66 C16 52 30 36 50 4Z\"/>", "zibens": "<path d=\"M58 2 L18 56 H46 L36 98 L82 40 H54Z\"/>", "cilvecins": "<g><circle cx=\"50\" cy=\"16\" r=\"12\"/><path d=\"M34 32 H66 L72 62 H62 L60 96 H52 V70 H48 V96 H40 L38 62 H28Z\"/></g>", "smaids": "<g><circle cx=\"50\" cy=\"50\" r=\"44\"/><circle cx=\"36\" cy=\"40\" r=\"6\" fill=\"#fff\"/><circle cx=\"64\" cy=\"40\" r=\"6\" fill=\"#fff\"/><path d=\"M28 58 Q50 82 72 58\" stroke=\"#fff\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/></g>", "skumjsmaids": "<g><circle cx=\"50\" cy=\"50\" r=\"44\"/><circle cx=\"36\" cy=\"40\" r=\"6\" fill=\"#fff\"/><circle cx=\"64\" cy=\"40\" r=\"6\" fill=\"#fff\"/><path d=\"M28 74 Q50 52 72 74\" stroke=\"#fff\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/></g>", "pukite": "<g><circle cx=\"50\" cy=\"22\" r=\"16\"/><circle cx=\"26\" cy=\"40\" r=\"16\"/><circle cx=\"74\" cy=\"40\" r=\"16\"/><circle cx=\"34\" cy=\"66\" r=\"16\"/><circle cx=\"66\" cy=\"66\" r=\"16\"/><circle cx=\"50\" cy=\"46\" r=\"13\" fill=\"#FFE082\"/></g>", "krusts": "<path d=\"M36 6 H64 V36 H94 V64 H64 V94 H36 V64 H6 V36 H36Z\"/>", "suns": "<g><rect x=\"16\" y=\"44\" width=\"58\" height=\"24\" rx=\"12\"/><rect x=\"60\" y=\"38\" width=\"16\" height=\"20\" rx=\"4\"/><circle cx=\"74\" cy=\"34\" r=\"15\"/><ellipse cx=\"88\" cy=\"41\" rx=\"10\" ry=\"7.5\"/><circle cx=\"97\" cy=\"38\" r=\"3.2\" fill=\"#1b1b1b\"/><path d=\"M63 24 Q54 28 57 50 Q64 50 68 38 Q69 30 63 24Z\" fill=\"#000\" fill-opacity=\".22\"/><circle cx=\"79\" cy=\"30\" r=\"2.6\" fill=\"#fff\"/><rect x=\"19\" y=\"60\" width=\"10\" height=\"26\" rx=\"4\"/><rect x=\"32\" y=\"62\" width=\"9\" height=\"24\" rx=\"4\"/><rect x=\"54\" y=\"62\" width=\"9\" height=\"24\" rx=\"4\"/><rect x=\"65\" y=\"58\" width=\"10\" height=\"28\" rx=\"4\"/><path d=\"M20 50 Q8 42 10 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"7\" stroke-linecap=\"round\"/></g>", "kakis": "<g><ellipse cx=\"46\" cy=\"68\" rx=\"22\" ry=\"26\"/><circle cx=\"46\" cy=\"32\" r=\"17\"/><path d=\"M31 24 L30 4 L44 17Z\"/><path d=\"M61 24 L62 4 L48 17Z\"/><path d=\"M64 86 Q94 84 90 58 Q88 48 80 50 Q86 72 62 76Z\"/></g>", "masina": "<g><path d=\"M6 68 V54 Q6 46 16 44 L28 42 L38 28 Q42 24 50 24 H66 Q74 24 78 30 L86 42 Q94 44 94 52 V68Z\"/><circle cx=\"28\" cy=\"70\" r=\"12\"/><circle cx=\"74\" cy=\"70\" r=\"12\"/><circle cx=\"28\" cy=\"70\" r=\"5\" fill=\"#fff\"/><circle cx=\"74\" cy=\"70\" r=\"5\" fill=\"#fff\"/><path d=\"M41 41 L48 30 H57 V41Z M61 30 H67 Q71 30 74 34 L79 41 H61Z\" fill=\"#fff\"/></g>", "kugitis": "<g><path d=\"M4 58 H96 L82 84 H18Z\"/><rect x=\"28\" y=\"40\" width=\"44\" height=\"18\" rx=\"3\"/><rect x=\"54\" y=\"22\" width=\"11\" height=\"18\"/><circle cx=\"39\" cy=\"49\" r=\"4\" fill=\"#fff\"/><circle cx=\"51\" cy=\"49\" r=\"4\" fill=\"#fff\"/><path d=\"M4 92 Q14 86 24 92 T44 92 T64 92 T84 92 T100 92\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\"/></g>", "saules_zime": "<g fill=\"none\" stroke=\"currentColor\"><path d=\"M50 4 L96 50 L50 96 L4 50Z\" stroke-width=\"6\" stroke-linejoin=\"round\"/><circle cx=\"50\" cy=\"50\" r=\"33\" stroke-width=\"7\"/><g stroke-width=\"4\" stroke-linecap=\"round\"><line x1=\"70.0\" y1=\"50.0\" x2=\"80.0\" y2=\"50.0\"/><line x1=\"68.5\" y1=\"57.7\" x2=\"77.7\" y2=\"61.5\"/><line x1=\"64.1\" y1=\"64.1\" x2=\"71.2\" y2=\"71.2\"/><line x1=\"57.7\" y1=\"68.5\" x2=\"61.5\" y2=\"77.7\"/><line x1=\"50.0\" y1=\"70.0\" x2=\"50.0\" y2=\"80.0\"/><line x1=\"42.3\" y1=\"68.5\" x2=\"38.5\" y2=\"77.7\"/><line x1=\"35.9\" y1=\"64.1\" x2=\"28.8\" y2=\"71.2\"/><line x1=\"31.5\" y1=\"57.7\" x2=\"22.3\" y2=\"61.5\"/><line x1=\"30.0\" y1=\"50.0\" x2=\"20.0\" y2=\"50.0\"/><line x1=\"31.5\" y1=\"42.3\" x2=\"22.3\" y2=\"38.5\"/><line x1=\"35.9\" y1=\"35.9\" x2=\"28.8\" y2=\"28.8\"/><line x1=\"42.3\" y1=\"31.5\" x2=\"38.5\" y2=\"22.3\"/><line x1=\"50.0\" y1=\"30.0\" x2=\"50.0\" y2=\"20.0\"/><line x1=\"57.7\" y1=\"31.5\" x2=\"61.5\" y2=\"22.3\"/><line x1=\"64.1\" y1=\"35.9\" x2=\"71.2\" y2=\"28.8\"/><line x1=\"68.5\" y1=\"42.3\" x2=\"77.7\" y2=\"38.5\"/></g></g>"},COL=["#E53935", "#FB8C00", "#FBC02D", "#43A047", "#1E88E5", "#8E24AA", "#6D4C41", "#212121"],FR={"tukss": "", "aplis": "<circle cx=\"480\" cy=\"330\" r=\"290\" fill=\"none\" stroke=\"#E53935\" stroke-width=\"40\"/>", "trijsturis": "<path d=\"M480 30 L860 620 H100Z\" fill=\"none\" stroke=\"#E53935\" stroke-width=\"40\" stroke-linejoin=\"round\"/>", "kvadrats": "<rect x=\"170\" y=\"30\" width=\"620\" height=\"600\" rx=\"40\" fill=\"none\" stroke=\"#1E88E5\" stroke-width=\"40\"/>", "vestule": "<rect x=\"24\" y=\"150\" width=\"290\" height=\"320\" rx=\"24\" fill=\"#FFFDE7\" stroke=\"#F2C200\" stroke-width=\"6\"/><rect x=\"335\" y=\"150\" width=\"290\" height=\"320\" rx=\"24\" fill=\"#FFFDE7\" stroke=\"#F2C200\" stroke-width=\"6\"/><rect x=\"646\" y=\"150\" width=\"290\" height=\"320\" rx=\"24\" fill=\"#FFFDE7\" stroke=\"#F2C200\" stroke-width=\"6\"/><text x=\"169\" y=\"520\" font-size=\"34\" text-anchor=\"middle\" fill=\"#9a8c3a\" font-family=\"Arial\">1</text><text x=\"480\" y=\"520\" font-size=\"34\" text-anchor=\"middle\" fill=\"#9a8c3a\" font-family=\"Arial\">2</text><text x=\"791\" y=\"520\" font-size=\"34\" text-anchor=\"middle\" fill=\"#9a8c3a\" font-family=\"Arial\">3</text>"};
+var board=document.getElementById('board'),sel=null,cur=COL[3],z=1;
+var pal=document.getElementById('palette');
+Object.keys(SH).forEach(function(k){var b=document.createElement('button');b.className='sh';b.innerHTML='<svg viewBox="0 0 100 100">'+SH[k]+'</svg>';b.onclick=function(){add(k)};pal.appendChild(b);});
+var cols=document.getElementById('cols');
+COL.forEach(function(c){var b=document.createElement('button');b.className='col'+(c===cur?' on':'');b.style.background=c;b.onclick=function(){cur=c;[].forEach.call(cols.children,function(x){x.classList.remove('on')});b.classList.add('on');if(sel)sel.style.color=c;};cols.appendChild(b);});
+function add(k){var e=document.createElement('div');e.className='el';var s=160;e.dataset.s=s;e.dataset.r=0;
+ e.style.width=e.style.height=s+'px';e.style.left=(480-s/2+(Math.random()*120-60))+'px';e.style.top=(330-s/2+(Math.random()*120-60))+'px';
+ e.style.color=cur;e.style.zIndex=z++;e.innerHTML='<svg viewBox="0 0 100 100">'+SH[k]+'</svg>';drag(e);board.appendChild(e);select(e);}
+function select(e){if(sel)sel.classList.remove('sel');sel=e;if(e){e.classList.add('sel');e.style.zIndex=z++;}}
+function drag(e){var sx,sy,ox,oy,id=null;
+ e.addEventListener('pointerdown',function(ev){ev.preventDefault();ev.stopPropagation();select(e);id=ev.pointerId;e.setPointerCapture(id);var sc=window.__scale||1;sx=ev.clientX/sc;sy=ev.clientY/sc;ox=parseFloat(e.style.left);oy=parseFloat(e.style.top);});
+ e.addEventListener('pointermove',function(ev){if(id!==ev.pointerId)return;var sc=window.__scale||1;var s=parseFloat(e.dataset.s);
+  var nx=Math.max(-s/2,Math.min(960-s/2,ox+ev.clientX/sc-sx)),ny=Math.max(-s/2,Math.min(660-s/2,oy+ev.clientY/sc-sy));e.style.left=nx+'px';e.style.top=ny+'px';});
+ function up(ev){if(id===ev.pointerId)id=null;}e.addEventListener('pointerup',up);e.addEventListener('pointercancel',up);}
+board.addEventListener('pointerdown',function(ev){if(ev.target===board||ev.target.id==='frame')select(null);});
+function resize(f){if(!sel)return;var s=Math.max(50,Math.min(600,parseFloat(sel.dataset.s)*f));var cx=parseFloat(sel.style.left)+parseFloat(sel.dataset.s)/2,cy=parseFloat(sel.style.top)+parseFloat(sel.dataset.s)/2;
+ sel.dataset.s=s;sel.style.width=sel.style.height=s+'px';sel.style.left=(cx-s/2)+'px';sel.style.top=(cy-s/2)+'px';}
+document.getElementById('big').onclick=function(){resize(1.25)};document.getElementById('small').onclick=function(){resize(0.8)};
+document.getElementById('rot').onclick=function(){if(!sel)return;var r=(parseFloat(sel.dataset.r)+45)%360;sel.dataset.r=r;sel.style.transform='rotate('+r+'deg)';};
+document.getElementById('del').onclick=function(){if(sel){sel.remove();sel=null;}};
+document.getElementById('clear').onclick=function(){[].forEach.call(board.querySelectorAll('.el'),function(x){x.remove()});sel=null;};
+var fb=document.querySelectorAll('#frames .btn');
+[].forEach.call(fb,function(b){b.onclick=function(){[].forEach.call(fb,function(x){x.classList.remove('on')});b.classList.add('on');document.getElementById('frame').innerHTML=FR[b.dataset.f];};});
+fb[0].click();
+</script></body></html>
